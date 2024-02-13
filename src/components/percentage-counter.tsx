@@ -3,7 +3,7 @@ import {useMotionValue, useSpring} from "framer-motion";
 import {useEffect, useState} from "react";
 
 
-export const PercentageCounter = ({percentage}: { percentage: number, minimum?: number }) => {
+export const PercentageCounter = ({percentage, caption}: { percentage: number, caption: string }) => {
     const bars = Array(50).fill("");
     const times = 360 / bars.length
     const size = 100;
@@ -64,6 +64,7 @@ export const PercentageCounter = ({percentage}: { percentage: number, minimum?: 
                 </div>
                 <div className={"absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"}>
                     <p className={" text-primary font-semibold text-5xl"}>{current}%</p>
+                    <p className={"text-sm text-center text-muted-foreground"}>{caption}</p>
                 </div>
             </div>
         </>
