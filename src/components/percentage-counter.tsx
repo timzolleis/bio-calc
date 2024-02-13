@@ -7,8 +7,8 @@ export const PercentageCounter = ({percentage, caption}: { percentage: number, c
     const bars = Array(50).fill("");
     const times = 360 / bars.length
     const size = 100;
-    const yellowThreshold = 35
-    const redThreshold = 15
+    const yellowThreshold = 75
+    const redThreshold = 45
     const [current, setCurrent] = useState<number>(0)
 
     const motionValue = useMotionValue(0)

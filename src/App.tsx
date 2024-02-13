@@ -14,12 +14,13 @@ interface CalculatePercentageProps {
 
 function calculatePercentage({birthDate, leaveDate, switchDate}: CalculatePercentageProps) {
     const day = 1000 * 60 * 60 * 24;
+
+
     const totalDaysLived = Math.round((leaveDate.getTime() - birthDate.getTime()) / (day));
-    const daysLivedBeforeSwitch = Math.round((switchDate.getTime() - birthDate.getTime()) / (day));
-    const daysLivedAfterSwitch = totalDaysLived - daysLivedBeforeSwitch;
+    const daysLivedAfterSwitch = birthDate.getTime() > switchDate.getTime() ? totalDaysLived : Math.round((leaveDate.getTime() - switchDate.getTime()) / (day))
+
     //Get the percentage of days lived after the switch date
     return {daysLivedAfterSwitch, totalDaysLived};
-
 }
 
 
@@ -31,11 +32,12 @@ function App() {
         setTotalDaysLived(0);
         setDaysLivedAfterSwitch(0);
     }
+    console.log(daysLivedAfterSwitch)
 
     const percentage = daysLivedAfterSwitch / totalDaysLived * 100 || 0;
 
     return (
-        <main className={"min-h-screen h-full"}>
+        <main>
             <Navbar/>
             <div className={"w-full flex justify-center mt-32"}>
                 <PercentageCounter caption={`${daysLivedAfterSwitch} / ${totalDaysLived} Tagen`} percentage={percentage}/>
@@ -74,7 +76,6 @@ function App() {
                     </div>
                     <Button className={"w-full"}>Berechnen</Button>
                 </form>
-
 
             </main>
 
