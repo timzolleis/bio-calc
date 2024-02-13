@@ -4,7 +4,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 import * as path from "path";
 
 const manifest = {
-    theme_color: "#000000",
+    theme_color: "#ffffff",
     background_color: "#ffffff",
     display: "standalone",
     scope: "/",

@@ -59,18 +59,18 @@ function App() {
                     <div className={"grid gap-2"}>
                         <Label>Bio-Umstellungsdatum</Label>
                         <input required={true} name={"switchDate"} defaultValue={"2017-05-01"}
-                               className={"p-2 rounded-md border"} type={"date"}/>
+                               className={"p-2 rounded-md border w-full"} type={"date"}/>
                     </div>
                     <div className={"grid gap-2"}>
                         <Label>Geburtsdatum</Label>
                         <input onChange={() => reset()} required={true} name={"birthDate"}
-                               className={"p-2 rounded-md border"} type={"date"}/>
+                               className={"p-2 rounded-md border w-full"} type={"date"}/>
                     </div>
                     <div className={"grid gap-2"}>
                         <Label>Abgangsdatum</Label>
                         <input required={true} name={"leaveDate"}
                                defaultValue={new Date().toISOString().substring(0, 10)}
-                               className={"p-2 rounded-md border"} type={"date"}/>
+                               className={"p-2 rounded-md border w-full"} type={"date"}/>
                     </div>
                     <Button className={"w-full"}>Berechnen</Button>
                 </form>
