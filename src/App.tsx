@@ -32,7 +32,6 @@ function App() {
         setTotalDaysLived(0);
         setDaysLivedAfterSwitch(0);
     }
-    console.log(daysLivedAfterSwitch)
 
     const percentage = daysLivedAfterSwitch / totalDaysLived * 100 || 0;
 
