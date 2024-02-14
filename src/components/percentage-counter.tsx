@@ -17,15 +17,14 @@ export const PercentageCounter = ({percentage, caption}: { percentage: number, c
         stiffness: 100,
     })
 
+    springValue.on("change", latest => {
+        setCurrent(latest.toFixed(0))
+    })
+
     useEffect(() => {
         motionValue.set(percentage)
     }, [motionValue, percentage]);
 
-    useEffect(() => {
-        springValue.on("change", latest => {
-            setCurrent(latest.toFixed(0))
-        })
-    }, [percentage, springValue])
 
     const getColor = (i: number): string => {
         const iPercentage = i * 2;
@@ -43,7 +42,7 @@ export const PercentageCounter = ({percentage, caption}: { percentage: number, c
     }
     return (
         <>
-            <div className={"relative"}>
+            <div className={"relative m-[100px]"}>
                 <div className={"-rotate-90"} style={{height: `${size}px`, width: `${size}px`}}>
                     <div
                         className={'relative top-1/2 left-1/2'}

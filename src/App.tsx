@@ -4,77 +4,46 @@ import {PercentageCounter} from "@/components/percentage-counter.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useState} from "react";
-
-
-interface CalculatePercentageProps {
-    birthDate: Date;
-    leaveDate: Date;
-    switchDate: Date;
-}
-
-function calculatePercentage({birthDate, leaveDate, switchDate}: CalculatePercentageProps) {
-    const day = 1000 * 60 * 60 * 24;
-
-
-    const totalDaysLived = Math.round((leaveDate.getTime() - birthDate.getTime()) / (day));
-    const daysLivedAfterSwitch = birthDate.getTime() > switchDate.getTime() ? totalDaysLived : Math.round((leaveDate.getTime() - switchDate.getTime()) / (day))
-
-    //Get the percentage of days lived after the switch date
-    return {daysLivedAfterSwitch, totalDaysLived};
-}
-
+import {DatePicker} from "@/components/ui/date-picker.tsx";
+import {differenceInDays} from "date-fns";
 
 function App() {
-    const [totalDaysLived, setTotalDaysLived] = useState<number>(0);
-    const [daysLivedAfterSwitch, setDaysLivedAfterSwitch] = useState<number>(0);
-
-    const reset = () => {
-        setTotalDaysLived(0);
-        setDaysLivedAfterSwitch(0);
-    }
-
+    const [birthDate, setBirthDate] = useState<Date | undefined>();
+    const [leaveDate, setLeaveDate] = useState<Date | undefined>();
+    const [switchDate, setSwitchDate] = useState<Date | undefined>(new Date("2017-05-01"));
+    const totalDaysLived = leaveDate && birthDate ? differenceInDays(leaveDate, birthDate) : 0;
+    const daysLivedAfterSwitch = birthDate && leaveDate && switchDate ? birthDate.getTime() <= switchDate.getTime() ? differenceInDays(leaveDate, switchDate) : totalDaysLived : 0;
     const percentage = daysLivedAfterSwitch / totalDaysLived * 100 || 0;
 
     return (
         <main>
             <Navbar/>
-            <div className={"w-full flex justify-center mt-32"}>
-                <PercentageCounter caption={`${daysLivedAfterSwitch} / ${totalDaysLived} Tagen`} percentage={percentage}/>
+            <div className={"w-full flex justify-center"}>
+                <PercentageCounter caption={`${daysLivedAfterSwitch} / ${totalDaysLived} Tagen`}
+                                   percentage={percentage} key={percentage}/>
             </div>
-            <main className={"px-3 py-4 w-full bottom-0 absolute"}>
-                <form className={"space-y-4"} onSubmit={(event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.target as HTMLFormElement);
-                    const birthDate = new Date(formData.get("birthDate") as string);
-                    const leaveDate = new Date(formData.get("leaveDate") as string);
-                    const switchDate = new Date(formData.get("switchDate") as string);
-                    const {daysLivedAfterSwitch, totalDaysLived} = calculatePercentage({
-                        birthDate,
-                        leaveDate,
-                        switchDate
-                    });
-                    setTotalDaysLived(totalDaysLived);
-                    setDaysLivedAfterSwitch(daysLivedAfterSwitch);
-                }}>
+            <div className={"flex justify-center w-full"}>
+                <Button size={"sm"} onClick={() => {
+                    setBirthDate(undefined);
+                    setLeaveDate(undefined);
+                }} variant={"outline"} className={"rounded-full"}>Zurücksetzen</Button>
+            </div>
 
+            <main className={"px-3 py-4 w-full mt-10"}>
+                <fieldset className={"space-y-4"}>
                     <div className={"grid gap-2"}>
                         <Label>Bio-Umstellungsdatum</Label>
-                        <input required={true} name={"switchDate"} defaultValue={"2017-05-01"}
-                               className={"p-2 rounded-md border w-full"} type={"date"}/>
+                        <DatePicker defaultValue={switchDate} onSelect={setSwitchDate}/>
                     </div>
                     <div className={"grid gap-2"}>
                         <Label>Geburtsdatum</Label>
-                        <input onChange={() => reset()} required={true} name={"birthDate"}
-                               className={"p-2 rounded-md border w-full"} type={"date"}/>
+                        <DatePicker defaultValue={birthDate} onSelect={setBirthDate}/>
                     </div>
                     <div className={"grid gap-2"}>
                         <Label>Abgangsdatum</Label>
-                        <input required={true} name={"leaveDate"}
-                               defaultValue={new Date().toISOString().substring(0, 10)}
-                               className={"p-2 rounded-md border w-full"} type={"date"}/>
+                        <DatePicker defaultValue={leaveDate} onSelect={setLeaveDate}/>
                     </div>
-                    <Button className={"w-full"}>Berechnen</Button>
-                </form>
+                </fieldset>
 
             </main>
 
