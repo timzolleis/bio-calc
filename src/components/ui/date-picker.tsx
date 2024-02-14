@@ -19,11 +19,21 @@ interface DatePickerProps {
 }
 
 export function DatePicker({onSelect, defaultValue}: DatePickerProps) {
+
     const [date, setDate] = React.useState<Date | undefined>(defaultValue)
     if (defaultValue === undefined && date) {
         setDate(undefined)
     }
 
+    const handleSelect = (date: Date) => {
+        setDate(date)
+        onSelect(date)
+    }
+
+
+   const footer = (
+       <Button variant={"outline"} size={"sm"} onClick={() => handleSelect(new Date())}>Heute</Button>
+   )
 
     return (
         <Popover>
@@ -43,13 +53,11 @@ export function DatePicker({onSelect, defaultValue}: DatePickerProps) {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
                 <Calendar
+                    footer={footer}
                     fromYear={2010} toYear={new Date().getFullYear()} captionLayout={"dropdown"}
                     mode="single"
                     selected={date}
-                    onSelect={(date) => {
-                        setDate(date)
-                        onSelect(date)
-                    }}
+                    onSelect={date => date && handleSelect(date)}
                     initialFocus
                 />
             </PopoverContent>

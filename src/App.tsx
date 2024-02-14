@@ -5,15 +5,23 @@ import {Label} from "@/components/ui/label.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useState} from "react";
 import {DatePicker} from "@/components/ui/date-picker.tsx";
-import {differenceInDays} from "date-fns";
+import {differenceInDays, format} from "date-fns";
 
 function App() {
+    const defaultSwitchDate = localStorage.getItem("switchDate") || "2017-05-01";
+    const onSetDefaultSwitchDate = (date?: Date) => {
+        if (!date) return;
+        localStorage.setItem("switchDate", format(date, "yyyy-MM-dd"))
+        setSwitchDate(date)
+    }
+
     const [birthDate, setBirthDate] = useState<Date | undefined>();
     const [leaveDate, setLeaveDate] = useState<Date | undefined>();
-    const [switchDate, setSwitchDate] = useState<Date | undefined>(new Date("2017-05-01"));
+    const [switchDate, setSwitchDate] = useState<Date | undefined>(new Date(defaultSwitchDate));
     const totalDaysLived = leaveDate && birthDate ? differenceInDays(leaveDate, birthDate) : 0;
     const daysLivedAfterSwitch = birthDate && leaveDate && switchDate ? birthDate.getTime() <= switchDate.getTime() ? differenceInDays(leaveDate, switchDate) : totalDaysLived : 0;
     const percentage = daysLivedAfterSwitch / totalDaysLived * 100 || 0;
+
 
     return (
         <main>
@@ -33,7 +41,7 @@ function App() {
                 <fieldset className={"space-y-4"}>
                     <div className={"grid gap-2"}>
                         <Label>Bio-Umstellungsdatum</Label>
-                        <DatePicker defaultValue={switchDate} onSelect={setSwitchDate}/>
+                        <DatePicker defaultValue={switchDate} onSelect={onSetDefaultSwitchDate}/>
                     </div>
                     <div className={"grid gap-2"}>
                         <Label>Geburtsdatum</Label>
